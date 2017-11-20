@@ -2,14 +2,17 @@
 
 window.renderStatistics = function (ctx, names, times) {
   var results = [];
-  var scorePosition = {x:165, y:100};
+  var scorePosition = {x: 165, y: 100};
+  var MAX_COLUMN_HEIGHT = 150;
+  var COLUMN_WIDTH = 40;
+  var COLUMN_DISTANCE = 50;
 
   for (var i = 0; i < names.length; i++) {
     results.push({name: names[i], time: Math.floor(times[i])});
   }
 
   results.sort(function (a, b) {
-    return a.time - b.time;
+    return b.time - a.time;
   });
 
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -31,12 +34,19 @@ window.renderStatistics = function (ctx, names, times) {
       ctx.fillStyle = 'rgba(0, 0, 255,' + opacity + ')';
     }
 
-    ctx.fillRect(position.x, position.y, 40, 150)
-  }
+    ctx.strokeText(player.name, position.x, scorePosition.y + columnHeight + 10);
+    ctx.strokeText(player.time, position.x, scorePosition.y - 20);
+    ctx.fillRect(position.x, position.y, COLUMN_WIDTH, columnHeight);
+  };
 
+  var columnHeight;
   for (i = 0; i < results.length; i++) {
-    drawScore(results[i], scorePosition);
-    scorePosition.x += 90;
+    columnHeight = Math.round(results[i].time * MAX_COLUMN_HEIGHT / results[0].time);
+    scorePosition.y = 100 + MAX_COLUMN_HEIGHT - columnHeight;
+
+    drawScore(results[i], scorePosition, columnHeight);
+
+    scorePosition.x += COLUMN_WIDTH + COLUMN_DISTANCE;
   }
 
 };
