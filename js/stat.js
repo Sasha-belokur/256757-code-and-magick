@@ -29,22 +29,18 @@ window.renderStatistics = function (ctx, names, times) {
     ctx.strokeText('Список результатов:', 220, 44);
   };
 
-  drawCloud();
-
   var drawScore = function (player, position) {
-    if (player.name === 'Вы') {
-      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-    } else {
-      var opacity = +Math.random().toFixed(1) || 0.1;
-      ctx.fillStyle = 'rgba(0, 0, 255,' + opacity + ')';
-    }
+    var opacity = player.name === 'Вы' ? 1 : +Math.random().toFixed(1) || 0.1;
+    var color = player.name === 'Вы' ? 'rgba(255, 0, 0,' + opacity + ')' : 'rgba(0, 0, 255,' + opacity + ')';
+
+    ctx.fillStyle = color;
 
     ctx.strokeText(player.name, position.x, scorePosition.y + columnHeight + 10);
     ctx.strokeText(player.time, position.x, scorePosition.y - 20);
     ctx.fillRect(position.x, position.y, COLUMN_WIDTH, columnHeight);
   };
 
-  var dranwColumns = function () {
+  var drawColumns = function () {
     for (i = 0; i < results.length; i++) {
       columnHeight = Math.round(results[i].time * MAX_COLUMN_HEIGHT / results[0].time);
       scorePosition.y = 100 + MAX_COLUMN_HEIGHT - columnHeight;
@@ -55,5 +51,6 @@ window.renderStatistics = function (ctx, names, times) {
     }
   };
 
-  dranwColumns();
+  drawCloud();
+  drawColumns();
 };
