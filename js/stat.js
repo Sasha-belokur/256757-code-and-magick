@@ -6,6 +6,7 @@ window.renderStatistics = function (ctx, names, times) {
   var MAX_COLUMN_HEIGHT = 150;
   var COLUMN_WIDTH = 40;
   var COLUMN_DISTANCE = 50;
+  var columnHeight;
 
   for (var i = 0; i < names.length; i++) {
     results.push({name: names[i], time: Math.floor(times[i])});
@@ -15,16 +16,20 @@ window.renderStatistics = function (ctx, names, times) {
     return b.time - a.time;
   });
 
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-  ctx.fillRect(110, 20, 420, 270);
+  var drawCloud = function () {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+    ctx.fillRect(110, 20, 420, 270);
 
-  ctx.fillStyle = 'rgba(255, 255, 255, 1)';
-  ctx.fillRect(100, 10, 420, 270);
+    ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+    ctx.fillRect(100, 10, 420, 270);
 
-  ctx.font = '16px PT Mono';
-  ctx.textBaseline = 'hanging';
-  ctx.strokeText('Ура вы победили!', 220, 20);
-  ctx.strokeText('Список результатов:', 220, 44);
+    ctx.font = '16px PT Mono';
+    ctx.textBaseline = 'hanging';
+    ctx.strokeText('Ура вы победили!', 220, 20);
+    ctx.strokeText('Список результатов:', 220, 44);
+  };
+
+  drawCloud();
 
   var drawScore = function (player, position) {
     if (player.name === 'Вы') {
@@ -39,14 +44,16 @@ window.renderStatistics = function (ctx, names, times) {
     ctx.fillRect(position.x, position.y, COLUMN_WIDTH, columnHeight);
   };
 
-  var columnHeight;
-  for (i = 0; i < results.length; i++) {
-    columnHeight = Math.round(results[i].time * MAX_COLUMN_HEIGHT / results[0].time);
-    scorePosition.y = 100 + MAX_COLUMN_HEIGHT - columnHeight;
+  var dranwColumns = function () {
+    for (i = 0; i < results.length; i++) {
+      columnHeight = Math.round(results[i].time * MAX_COLUMN_HEIGHT / results[0].time);
+      scorePosition.y = 100 + MAX_COLUMN_HEIGHT - columnHeight;
 
-    drawScore(results[i], scorePosition, columnHeight);
+      drawScore(results[i], scorePosition, columnHeight);
 
-    scorePosition.x += COLUMN_WIDTH + COLUMN_DISTANCE;
-  }
+      scorePosition.x += COLUMN_WIDTH + COLUMN_DISTANCE;
+    }
+  };
 
+  dranwColumns();
 };
