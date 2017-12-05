@@ -51,12 +51,79 @@ var renderWizards = function () {
   similarListElement.appendChild(fragment);
 };
 
-var openUserDialog = function () {
-  var userDialog = document.querySelector('.setup');
-  userDialog.classList.remove('hidden');
-  document.querySelector('.setup-similar').classList.remove('hidden');
+// var openUserDialog = function () {
+//   var userDialog = document.querySelector('.setup');
+//   userDialog.classList.remove('hidden');
+//   document.querySelector('.setup-similar').classList.remove('hidden');
 
-  renderWizards();
+//   renderWizards();
+// };
+
+var popupEscHandler = function (evt) {
+  var ESC_KEYCODE = 27;
+
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
 };
 
-openUserDialog();
+var openPopup = function () {
+  var setup = document.querySelector('.setup');
+
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', popupEscHandler);
+};
+
+var closePopup = function () {
+  var setup = document.querySelector('.setup');
+
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', popupEscHandler);
+};
+
+var changeEyesColor = function (obj) {
+  var colors = ['black', 'red', 'blue', 'yellow', 'green'];
+  var counter = 1;
+
+  return function () {
+    var color = colors[counter++ % colors.length];
+    obj.style.fill = color;
+  };
+};
+
+var changeCoatColor = function (obj) {
+  var colors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+  var counter = 1;
+
+  return function () {
+    var color = colors[counter++ % colors.length];
+    obj.style.fill = color;
+  };
+};
+
+var addEventListeners = function () {
+  var setupOpen = document.querySelector('.setup-open');
+  var setupClose = document.querySelector('.setup-close');
+  var wizardEyes = document.querySelector('.setup-wizard .wizard-eyes');
+  var wizardCoat = document.querySelector('.setup-wizard .wizard-coat');
+  var ENTER_KEYCODE = 13;
+
+  setupOpen.addEventListener('click', openPopup);
+  setupOpen.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      openPopup();
+    }
+  });
+
+  setupClose.addEventListener('click', closePopup);
+  setupClose.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === ENTER_KEYCODE) {
+      closePopup();
+    }
+  });
+
+  wizardEyes.addEventListener('click', changeEyesColor(wizardEyes));
+  wizardCoat.addEventListener('click', changeCoatColor(wizardCoat));
+};
+
+addEventListeners();
